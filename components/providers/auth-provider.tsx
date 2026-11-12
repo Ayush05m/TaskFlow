@@ -170,7 +170,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         localStorage.setItem("user", JSON.stringify(data.user))
 
         toast({
-          title: "Welcome to RobotiX!",
+          title: "Welcome to ROBOTiX!",
           description: `Account created successfully for ${name}`,
         })
 

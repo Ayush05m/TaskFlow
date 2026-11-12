@@ -14,10 +14,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/ui/use-toast"
-import { getAssignees, getTask, updateTask, addAssigneeToTask } from "@/lib/actions"
+import { getAssignees, getTask, updateTask, addAssigneeToTask, reassignTask } from "@/lib/actions"
 import type { TaskWithTypedAssignees, User } from "@/db/schema"
 import type { Assignee } from "@/lib/types"
-import { ArrowLeft, Loader2, Plus, User as UserIcon, Clock } from "lucide-react"
+import { MultiSelect } from "@/components/ui/multi-select"
+import { ArrowLeft, Loader2, Plus, User as UserIcon, Clock, RefreshCw } from "lucide-react"
 
 export default function EditTaskPage() {
   const { user } = useAuth()
@@ -32,6 +33,8 @@ export default function EditTaskPage() {
   const [updating, setUpdating] = useState(false)
   const [addingAssignee, setAddingAssignee] = useState(false)
   const [newAssigneeId, setNewAssigneeId] = useState("")
+  const [reassigning, setReassigning] = useState(false)
+  const [reassigneeIds, setReassigneeIds] = useState<string[]>([])
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -75,6 +78,10 @@ export default function EditTaskPage() {
           priority: fetched.priority,
           dueDate: new Date(fetched.dueDate).toISOString().split('T')[0],
         })
+
+        // Set current assignee IDs for reassignment
+        const currentAssigneeIds = (fetched.assignees as Assignee[]).map(a => a.id.toString())
+        setReassigneeIds(currentAssigneeIds)
 
         // Fetch assignees list
         const list = await getAssignees(user.id)
@@ -148,6 +155,7 @@ export default function EditTaskPage() {
           assignees: updatedTask.assignees as Assignee[]
         })
         setNewAssigneeId("")
+        setReassigneeIds([...reassigneeIds, newAssigneeId])
         toast({ title: "Success", description: "Assignee added successfully." })
       }
     } catch (err) {
@@ -155,6 +163,44 @@ export default function EditTaskPage() {
       toast({ variant: "destructive", title: "Error", description: "Failed to add assignee." })
     } finally {
       setAddingAssignee(false)
+    }
+  }
+
+  const handleReassign = async () => {
+    if (!task || reassigneeIds.length === 0) return
+
+    setReassigning(true)
+    try {
+      const newAssignees: Assignee[] = reassigneeIds.map(id => {
+        const user = assignees.find(u => u.id === Number(id))
+        if (!user) throw new Error(`User with id ${id} not found`)
+        return {
+          id: user.id,
+          name: user.name,
+          assignedAt: new Date()
+        }
+      })
+
+      const updatedTask = await reassignTask(taskId, newAssignees)
+      if (updatedTask) {
+        setTask({
+          ...updatedTask,
+          assignees: updatedTask.assignees as Assignee[]
+        })
+        toast({ 
+          title: "Success", 
+          description: `Task reassigned to ${newAssignees.length} assignee${newAssignees.length !== 1 ? 's' : ''}.` 
+        })
+      }
+    } catch (err) {
+      console.error(err)
+      toast({ 
+        variant: "destructive", 
+        title: "Error", 
+        description: err instanceof Error ? err.message : "Failed to reassign task." 
+      })
+    } finally {
+      setReassigning(false)
     }
   }
 
@@ -277,14 +323,63 @@ export default function EditTaskPage() {
               </CardContent>
             </Card>
 
+            {/* Reassign Task */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <RefreshCw className="h-5 w-5" />
+                  Reassign Task
+                </CardTitle>
+                <CardDescription>Replace all assignees for this task</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label>Select Assignees</Label>
+                  <MultiSelect
+                    options={assignees.map(assignee => ({
+                      value: assignee.id?.toString() || "",
+                      label: assignee.name
+                    }))}
+                    value={reassigneeIds}
+                    onChange={setReassigneeIds}
+                    placeholder="Select assignees"
+                  />
+                  {reassigneeIds.length > 0 && (
+                    <div className="text-xs text-muted-foreground mt-2">
+                      {reassigneeIds.length} assignee{reassigneeIds.length !== 1 ? 's' : ''} selected
+                    </div>
+                  )}
+                </div>
+                
+                <Button 
+                  onClick={handleReassign} 
+                  disabled={reassigneeIds.length === 0 || reassigning}
+                  className="w-full"
+                  variant="default"
+                >
+                  {reassigning ? (
+                    <>
+                      <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                      Reassigning...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="mr-2 h-4 w-4" />
+                      Reassign Task
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Add New Assignee */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Plus className="h-5 w-5" />
-                  {task.assignees.length > 0 ? "Reassign Assignee" : "Assign Assignee"}
+                  Add Assignee
                 </CardTitle>
-                <CardDescription>Reassign or add additional assignees to this task</CardDescription>
+                <CardDescription>Add an additional assignee to this task</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -312,6 +407,7 @@ export default function EditTaskPage() {
                   onClick={handleAddAssignee} 
                   disabled={!newAssigneeId || addingAssignee}
                   className="w-full"
+                  variant="outline"
                 >
                   {addingAssignee ? (
                     <>

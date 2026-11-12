@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Github, ExternalLink } from "lucide-react"
-import { APP_CONFIG, ROUTES } from "@/lib/constants"
+import { Github, ExternalLink, Linkedin, Instagram, Mail } from "lucide-react"
+import { APP_CONFIG, ROUTES, SOCIAL_LINKS } from "@/lib/constants"
 
 export function Footer() {
   const footerSections = [
@@ -59,19 +59,50 @@ export function Footer() {
 
           <div>
             <h3 className="font-semibold mb-4">Connect</h3>
-            <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <div className="flex items-center gap-3">
+              <a
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full bg-white/20 hover:bg-white/30"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+
+              <a
+                href={SOCIAL_LINKS.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full bg-white/20 hover:bg-white/30"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+
+              <a
+                href={SOCIAL_LINKS.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full bg-white/20 hover:bg-white/30"
+              >
                 <Github className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <ExternalLink className="h-5 w-5" />
+
+              <a
+                href={`mailto:${SOCIAL_LINKS.email}`}
+                aria-label="Email"
+                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full bg-white/20 hover:bg-white/30"
+              >
+                <Mail className="h-5 w-5" />
               </a>
             </div>
           </div>
         </div>
 
         <div className="border-t border-border/50 mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 {APP_CONFIG.name}. All rights reserved.</p>
+          <p>&copy; 2025 {APP_CONFIG.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -143,7 +143,7 @@ export default function TeamPage() {
                 of {members.length}
               </h3>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Meet the passionate individuals who drive innovation and excellence at RobotiX Club. Our diverse team
+                Meet the passionate individuals who drive innovation and excellence at ROBOTiX Club. Our diverse team
                 brings together expertise in robotics, AI, IoT, and cutting-edge technology.
               </p>
             </div>
@@ -248,11 +248,11 @@ export default function TeamPage() {
                         <div className="relative">
                           <Avatar className="w-20 h-20 mx-auto mb-4 ring-4 ring-primary/20 group-hover:ring-primary/40 transition-all">
                             <AvatarImage
-                              src={member.avatarUrl || "/placeholder.svg?height=100&width=100"}
+                              src={member.avatarUrl || undefined}
                               alt={member.name}
                             />
                             <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
-                              {generateInitials(member.name)}
+                              {generateInitials(member?.name || "")}
                             </AvatarFallback>
                           </Avatar>
                           <div
@@ -321,12 +321,11 @@ export default function TeamPage() {
                     </Link>
                   ) : (
                     <>
-                      <Link href={ROUTES.register}>
-                        <Button size="lg">
-                          Join RobotiX Club
-                          <Users className="ml-2 h-5 w-5" />
-                        </Button>
-                      </Link>
+                      {/* Registration temporarily closed - link commented out */}
+                      <Button disabled size="lg" className="opacity-70">
+                        Join ROBOTiX Club
+                        <Users className="ml-2 h-5 w-5" />
+                      </Button>
                       <Link href="/#contact">
                         <Button variant="outline" size="lg">
                           Contact Us

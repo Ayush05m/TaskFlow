@@ -182,15 +182,11 @@ export function Navigation() {
                         Login
                       </Button>
                     </Link>
-                    <Link href="/register">
-                      <Button 
-                        size="sm"
-                        className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 group"
-                      >
-                        Join Club
-                        <Sparkles className="ml-1 h-3 w-3 group-hover:rotate-12 transition-transform duration-300" />
-                      </Button>
-                    </Link>
+                      {/* Registration temporarily closed - link commented out
+                      <Link href="/register">
+                        <a className="px-4 py-2 rounded-md bg-blue-600 text-white">Join Club</a>
+                      </Link>
+                      */}
                   </>
                 )}
               </div>
@@ -263,14 +259,14 @@ export function Navigation() {
                               <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                             </Button>
                           </Link>
-                          <Link href="/register" onClick={() => setIsOpen(false)}>
+                          {/* <Link href="/register" onClick={() => setIsOpen(false)}>
                             <Button 
                               className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25 group"
                             >
                               Join Club
                               <Sparkles className="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
                             </Button>
-                          </Link>
+                          </Link> */}
                         </>
                       )}
                     </div>

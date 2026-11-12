@@ -42,11 +42,10 @@ export function ProtectedRoute({ children, requireAuth = true, checkPermission, 
             <Link href={ROUTES.login}>
               <Button className="w-full">Sign In</Button>
             </Link>
-            <Link href={ROUTES.register}>
-              <Button variant="outline" className="w-full">
-                Create Account
-              </Button>
-            </Link>
+            {/* Registration temporarily closed - Create Account disabled */}
+            <Button disabled variant="outline" className="w-full">
+              Create Account
+            </Button>
           </CardContent>
         </Card>
       </div>

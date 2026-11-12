@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "@/hooks/use-auth"
 import DashboardLayout from "@/components/dashboard-layout"
 import { DatabaseStatus } from "@/components/database-status"
@@ -36,6 +36,19 @@ export default function SettingsPage() {
     taskUpdated: true,
     taskCompleted: true,
   })
+
+  // Load notification preferences from user
+  useEffect(() => {
+    if (user && (user as any).notificationPreferences) {
+      const prefs = (user as any).notificationPreferences as typeof notificationSettings
+      setNotificationSettings({
+        emailNotifications: prefs.emailNotifications ?? true,
+        taskAssigned: prefs.taskAssigned ?? true,
+        taskUpdated: prefs.taskUpdated ?? true,
+        taskCompleted: prefs.taskCompleted ?? true,
+      })
+    }
+  }, [user])
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -88,7 +101,30 @@ export default function SettingsPage() {
 
     try {
       setLoading(true)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      
+      // Update user with notification preferences
+      const response = await fetch("/api/user/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...user,
+          notificationPreferences: notificationSettings,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update notification preferences")
+      }
+
+      const data = await response.json()
+      
+      // Update local user state
+      await updateUser({
+        ...user,
+        notificationPreferences: notificationSettings,
+      } as any)
 
       toast({
         title: "Notification settings updated",

@@ -116,7 +116,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {/* <CheckCircle className="h-6 w-6 text-white" /> */}
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                RobotiX Team Management
+                ROBOTiX Team Management
               </span>
             </div>
           </SidebarHeader>

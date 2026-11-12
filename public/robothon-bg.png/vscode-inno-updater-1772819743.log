@@ -1,0 +1,18 @@
+Mar 06 17:55:43.055 INFO Removing files from base directory of "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe", preserving commit folder: bdd88df003
+Mar 06 17:55:43.055 INFO remove_files: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe", commit: bdd88df003
+Mar 06 17:55:43.055 INFO Reading top-level directory: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code"
+Mar 06 17:55:43.055 INFO Skipping commit folder: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\bdd88df003"
+Mar 06 17:55:43.055 INFO Processing bin directory: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+Mar 06 17:55:43.056 INFO Skipping non-old file in bin: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code"
+Mar 06 17:55:43.056 INFO Skipping non-old file in bin: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code-tunnel.exe"
+Mar 06 17:55:43.056 INFO Skipping non-old file in bin: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd"
+Mar 06 17:55:43.056 INFO Skipping code_path executable: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+Mar 06 17:55:43.056 INFO Skipping VisualElementsManifest.xml: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.VisualElementsManifest.xml"
+Mar 06 17:55:43.056 INFO Skipping unins file: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\unins000.dat"
+Mar 06 17:55:43.056 INFO Skipping unins file: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\unins000.exe"
+Mar 06 17:55:43.056 INFO Skipping unins file: "C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Microsoft VS Code\\unins000.msg"
+Mar 06 17:55:43.056 INFO Collected all directories and file handles for removal
+Mar 06 17:55:43.056 INFO All file handles marked for deletion
+Mar 06 17:55:43.056 INFO All files deleted
+Mar 06 17:55:43.056 INFO File removal operation completed
+Mar 06 17:55:43.056 INFO Successfully completed file removal operation

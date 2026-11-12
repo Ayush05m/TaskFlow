@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { PriorityBadge } from "@/components/priority-badge"
 import { StatusBadge } from "@/components/status-badge"
 import type { TaskWithTypedAssignees } from "@/db/schema"
-import { Calendar, User, Clock, RotateCcw, History } from "lucide-react"
+import { Calendar, User, Clock } from "lucide-react"
 
 type TaskCardProps = {
   task: TaskWithTypedAssignees
@@ -17,14 +17,9 @@ export function TaskCard({ task, className }: TaskCardProps) {
   const isOverdue = new Date(dueDate) < new Date() && task.status !== "completed"
   const daysUntilDue = Math.ceil((new Date(dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
 
-  // Get current assignee (latest in the array)
-  const currentAssignee = task.assignees[task.assignees.length - 1]
-  
-  // Check if task was reassigned (more than one assignee in history)
-  const wasReassigned = task.assignees.length > 1
-  
-  // Get original assignee
-  const originalAssignee = task.assignees[0]
+  // Get all assignees
+  const allAssignees = task.assignees || []
+  const hasMultipleAssignees = allAssignees.length > 1
   
   const assignerName = task.assignerName
   const updatedAt = task.updatedAt
@@ -40,10 +35,10 @@ export function TaskCard({ task, className }: TaskCardProps) {
           </CardTitle>
           <div className="flex flex-col gap-1 items-end">
             <PriorityBadge priority={task.priority as "low" | "medium" | "high"} />
-            {wasReassigned && (
+            {hasMultipleAssignees && (
               <Badge variant="secondary" className="text-xs">
-                <RotateCcw className="h-3 w-3 mr-1" />
-                Reassigned
+                <User className="h-3 w-3 mr-1" />
+                {allAssignees.length} Assignees
               </Badge>
             )}
           </div>
@@ -74,37 +69,52 @@ export function TaskCard({ task, className }: TaskCardProps) {
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <User className="h-4 w-4 text-muted-foreground" />
-              <span className="text-muted-foreground">Currently assigned to:</span>
-              <span className="font-medium text-primary">{currentAssignee?.name}</span>
-            </div>
-            
-            {wasReassigned && (
-              <div className="ml-6 space-y-1">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <History className="h-3 w-3" />
-                  <span>Assignment History:</span>
+            {allAssignees.length > 0 ? (
+              <>
+                <div className="flex items-center gap-2 text-sm">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    {hasMultipleAssignees ? "Assigned to:" : "Assigned to:"}
+                  </span>
+                  {!hasMultipleAssignees ? (
+                    <span className="font-medium text-primary">{allAssignees[0].name}</span>
+                  ) : (
+                    <span className="font-medium text-primary">
+                      {allAssignees[0].name}
+                      {allAssignees.length > 1 && (
+                        <span className="text-muted-foreground ml-1">
+                          +{allAssignees.length - 1} more
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </div>
-                <div className="ml-4 space-y-1">
-                  {task.assignees.slice().reverse().map((assignee, index) => {
-                    const isOriginal = index === task.assignees.length - 1
-                    const isCurrent = index === 0
-                    return (
-                      <div key={`${assignee.id}-${assignee.assignedAt}`} className="text-xs flex items-center gap-2">
-                        <span className={`${isCurrent ? "font-medium text-primary" : "text-muted-foreground"}`}>
-                          {assignee.name}
-                        </span>
-                        <span className="text-muted-foreground">
-                          {isCurrent ? "(Current)" : isOriginal ? "(Original)" : ""}
-                        </span>
-                        <span className="text-muted-foreground">
-                          - {new Date(assignee.assignedAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                    )
-                  })}
-                </div>
+                
+                {hasMultipleAssignees && (
+                  <div className="ml-6 space-y-1">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <User className="h-3 w-3" />
+                      <span>All Assignees ({allAssignees.length}):</span>
+                    </div>
+                    <div className="ml-4 space-y-1">
+                      {allAssignees.map((assignee, index) => (
+                        <div key={`${assignee.id}-${assignee.assignedAt}`} className="text-xs flex items-center gap-2">
+                          <span className="text-muted-foreground">
+                            {assignee.name}
+                          </span>
+                          <span className="text-muted-foreground">
+                            - {new Date(assignee.assignedAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="h-4 w-4" />
+                <span>Unassigned</span>
               </div>
             )}
           </div>

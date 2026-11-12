@@ -123,6 +123,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const register = async (name: string, email: string, password: string, position: 'overall-cordinator' | 'head-coordinator' | 'core-coordinator' | 'executive' | 'members') => {
+    // Registrations are currently closed. Short-circuit and inform the user.
+    toast({
+      variant: "destructive",
+      title: "Registrations closed",
+      description: "New registrations are temporarily disabled. Please contact the team for more information.",
+    })
+    return
+    
+    /* Original implementation (commented out while registrations are closed):
     try {
       setIsLoading(true)
 
@@ -172,6 +181,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false)
     }
+    */
   }
 
   const logout = () => {

@@ -72,7 +72,14 @@ export const APP_CONFIG = {
   name: "ROBOTiX",
   description: "ROBOTiX Club",
   version: "1.0.0",
-  author: "RobotiX Club",
+  author: "ROBOTiX Club",
+} as const
+
+export const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/robotix_nitrr?igsh=MXBnNWd2Nm91OGd5dQ==",
+  linkedin: "https://www.linkedin.com/company/robotix-nitrr/",
+  github: "https://github.com/robotixnitrr",
+  email: "robotixclub@nitrr.ac.in",
 } as const
 
 export const STATUS_COLORS = {

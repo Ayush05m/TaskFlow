@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
+import { MultiSelect } from "@/components/ui/multi-select"
 import { createTask, getAssignees } from "@/lib/actions"
 import type { User } from "@/db/schema"
 import { Loader2, AlertCircle } from "lucide-react"
@@ -24,7 +25,7 @@ interface FormData {
   description: string
   priority: "low" | "medium" | "high"
   dueDate: string
-  assigneeId: string
+  assigneeIds: string[]
 }
 
 interface FormErrors {
@@ -32,7 +33,7 @@ interface FormErrors {
   description?: string
   priority?: string
   dueDate?: string
-  assigneeId?: string
+  assigneeIds?: string
 }
 
 interface FormState {
@@ -63,8 +64,9 @@ const validationRules = {
     required: true,
     minDate: new Date().toISOString().split('T')[0], // Today
   },
-  assigneeId: {
+  assigneeIds: {
     required: true,
+    minLength: 1,
   },
 }
 
@@ -113,9 +115,9 @@ const validateField = (name: keyof FormData, value: string): string | undefined 
       }
       break
     }
-    case 'assigneeId':
-      if (!value) {
-        return 'Please select an assignee'
+    case 'assigneeIds':
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        return 'Please select at least one assignee'
       }
       break
   }
@@ -128,9 +130,18 @@ const validateForm = (data: FormData): FormErrors => {
 
   Object.keys(data).forEach((key) => {
     const fieldName = key as keyof FormData
-    const error = validateField(fieldName, data[fieldName])
-    if (error) {
-      errors[fieldName] = error
+    const value = data[fieldName]
+    
+    // Special handling for assigneeIds array
+    if (fieldName === 'assigneeIds') {
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        errors[fieldName] = 'Please select at least one assignee'
+      }
+    } else {
+      const error = validateField(fieldName, value as string)
+      if (error) {
+        errors[fieldName] = error
+      }
     }
   })
 
@@ -151,7 +162,7 @@ export default function CreateTaskPage() {
       description: "",
       priority: "medium",
       dueDate: "",
-      assigneeId: "",
+      assigneeIds: [],
     },
     errors: {},
     touched: {
@@ -159,7 +170,7 @@ export default function CreateTaskPage() {
       description: false,
       priority: false,
       dueDate: false,
-      assigneeId: false,
+      assigneeIds: false,
     },
     isSubmitting: false,
     isValid: false,
@@ -210,10 +221,19 @@ export default function CreateTaskPage() {
   }, [toast])
 
   // Optimized field update handler
-  const updateField = useCallback((field: keyof FormData, value: string) => {
+  const updateField = useCallback((field: keyof FormData, value: string | string[]) => {
     setFormState(prev => {
       const newData = { ...prev.data, [field]: value }
-      const fieldError = validateField(field, value)
+      let fieldError: string | undefined
+      
+      // Special validation for assigneeIds
+      if (field === 'assigneeIds') {
+        if (!value || (Array.isArray(value) && value.length === 0)) {
+          fieldError = 'Please select at least one assignee'
+        }
+      } else {
+        fieldError = validateField(field, value as string)
+      }
 
       return {
         ...prev,
@@ -240,8 +260,8 @@ export default function CreateTaskPage() {
     updateField('priority', value)
   }, [updateField])
 
-  const handleAssigneeChange = useCallback((value: string) => {
-    updateField('assigneeId', value)
+  const handleAssigneeChange = useCallback((value: string[]) => {
+    updateField('assigneeIds', value)
   }, [updateField])
 
   // Form submission
@@ -258,7 +278,7 @@ export default function CreateTaskPage() {
         description: true,
         priority: true,
         dueDate: true,
-        assigneeId: true,
+        assigneeIds: true,
       },
     }))
 
@@ -277,10 +297,13 @@ export default function CreateTaskPage() {
     try {
       setFormState(prev => ({ ...prev, isSubmitting: true }))
 
-      // Find the selected assignee to get their name
-      const selectedAssignee = assignees.find(a => a.id?.toString() === formState.data.assigneeId)
-      if (!selectedAssignee) {
-        throw new Error("Selected assignee not found")
+      // Find all selected assignees to get their names
+      const selectedAssignees = assignees.filter(a => 
+        formState.data.assigneeIds.includes(a.id?.toString() || "")
+      )
+      
+      if (selectedAssignees.length === 0) {
+        throw new Error("No valid assignees selected")
       }
 
       const taskData = {
@@ -291,13 +314,11 @@ export default function CreateTaskPage() {
         dueDate: new Date(formState.data.dueDate),
         assignerId: Number(user.id),
         assignerName: user.name,
-        assignee:
-        {
-          id: Number(selectedAssignee.id),
-          name: selectedAssignee.name,
+        assignees: selectedAssignees.map(assignee => ({
+          id: Number(assignee.id),
+          name: assignee.name,
           assignedAt: new Date(),
-        }
-
+        }))
       }
 
       console.log("Submitting task data:", taskData)
@@ -457,28 +478,26 @@ export default function CreateTaskPage() {
                 </div>
               </div>
 
-              {/* Assignee Field */}
+              {/* Assignees Field */}
               <div className="space-y-2">
                 <Label>
                   Assign To <span className="text-destructive">*</span>
                 </Label>
-                <Select
-                  value={formState.data.assigneeId}
-                  onValueChange={handleAssigneeChange}
-                  disabled={assigneesLoading}
-                >
-                  <SelectTrigger className={formState.errors.assigneeId && formState.touched.assigneeId ? "border-destructive" : ""}>
-                    <SelectValue placeholder={assigneesLoading ? "Loading assignees..." : "Select an assignee"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {assignees.map((assignee) => (
-                      <SelectItem key={assignee.id?.toString()} value={assignee.id?.toString() || ""}>
-                        {assignee.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formState.touched.assigneeId && <FieldError error={formState.errors.assigneeId} />}
+                <MultiSelect
+                  options={assignees.map(assignee => ({
+                    value: assignee.id?.toString() || "",
+                    label: assignee.name
+                  }))}
+                  value={formState.data.assigneeIds}
+                  onChange={handleAssigneeChange}
+                  placeholder={assigneesLoading ? "Loading assignees..." : "Select assignees"}
+                />
+                {formState.touched.assigneeIds && <FieldError error={formState.errors.assigneeIds} />}
+                {formState.data.assigneeIds.length > 0 && (
+                  <div className="text-xs text-muted-foreground">
+                    {formState.data.assigneeIds.length} assignee{formState.data.assigneeIds.length !== 1 ? 's' : ''} selected
+                  </div>
+                )}
               </div>
             </CardContent>
 

@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { getTasks, getAssignees } from "@/lib/actions"
 import type { TaskWithTypedAssignees, User } from "@/db/schema"
-import { ClipboardList, Loader2, MoreHorizontal, PlusCircle, Search, AlertCircle, History, User as UserIcon, GripVertical } from "lucide-react"
+import { ClipboardList, Loader2, MoreHorizontal, PlusCircle, Search, AlertCircle, User as UserIcon, GripVertical } from "lucide-react"
 
 export default function TasksPage() {
   const { user } = useAuth()
@@ -150,21 +150,10 @@ export default function TasksPage() {
     new Set(tasks.map((task) => ({ id: task.assignerId, name: task.assignerName }))),
   ).filter((assigner, index, self) => self.findIndex((a) => a.id === assigner.id) === index)
 
-  // Helper function to get current assignee
-  const getCurrentAssignee = (assignees: any[]) => {
-    if (!assignees || assignees.length === 0) return null
-    return assignees[assignees.length - 1] // Latest assignee
-  }
-
-  // Helper function to check if task was reassigned
-  const wasReassigned = (assignees: any[]) => {
-    return assignees && assignees.length > 1
-  }
-
-  // Helper function to get assignment history
-  const getAssignmentHistory = (assignees: any[]) => {
-    if (!assignees || assignees.length <= 1) return []
-    return assignees.slice(0, -1) // All except current assignee
+  // Helper function to get all assignees
+  const getAllAssignees = (assignees: any[]) => {
+    if (!assignees || assignees.length === 0) return []
+    return assignees
   }
 
   const handleResetFilters = () => {
@@ -186,8 +175,8 @@ export default function TasksPage() {
   const canCreateTasks = true // You may want to add different logic here
   const canEditTask = (task: TaskWithTypedAssignees) => task.assignerId === Number(user.id)
   const canUpdateStatus = (task: TaskWithTypedAssignees) => {
-    const currentAssignee = getCurrentAssignee(task.assignees)
-    return currentAssignee && currentAssignee.id === Number(user.id)
+    const allAssignees = getAllAssignees(task.assignees)
+    return allAssignees.some(assignee => assignee.id === Number(user.id))
   }
 
   // Loading skeleton component
@@ -418,9 +407,7 @@ export default function TasksPage() {
                       </TableHeader>
                       <TableBody>
                         {filteredTasks.map((task) => {
-                          const currentAssignee = getCurrentAssignee(task.assignees)
-                          const isReassigned = wasReassigned(task.assignees)
-                          const history = getAssignmentHistory(task.assignees)
+                          const allAssignees = getAllAssignees(task.assignees)
 
                           return (
                             <TableRow key={task.id}>
@@ -435,39 +422,50 @@ export default function TasksPage() {
                                 {new Date(task.dueDate || '').toLocaleDateString()}
                               </TableCell>
                               <TableCell>
-                                <div className="flex items-center gap-2">
-                                  <div className="flex items-center gap-1">
-                                    <UserIcon className="h-3 w-3 text-muted-foreground" />
-                                    <span className="max-w-[120px] truncate">
-                                      {currentAssignee?.name || 'Unassigned'}
-                                    </span>
-                                  </div>
-                                  {isReassigned && (
-                                    <TooltipProvider>
-                                      <Tooltip>
-                                        <TooltipTrigger asChild>
-                                          <Badge variant="secondary" className="gap-1 text-xs">
-                                            <History className="h-3 w-3" />
-                                            {history.length}
-                                          </Badge>
-                                        </TooltipTrigger>
-                                        <TooltipContent side="top" className="max-w-xs">
-                                          <div className="space-y-1">
-                                            <p className="font-medium">Assignment History:</p>
-                                            {history.map((assignee, index) => (
-                                              <div key={index} className="text-xs">
-                                                {assignee.name} - {new Date(assignee.assignedAt).toLocaleDateString()}
-                                              </div>
-                                            ))}
-                                            <div className="text-xs border-t pt-1 font-medium">
-                                              Current: {currentAssignee?.name} - {new Date(currentAssignee?.assignedAt || '').toLocaleDateString()}
+                                {allAssignees.length > 0 ? (
+                                  <div className="flex flex-col gap-1">
+                                    {allAssignees.length === 1 ? (
+                                      <div className="flex items-center gap-1">
+                                        <UserIcon className="h-3 w-3 text-muted-foreground" />
+                                        <span className="max-w-[120px] truncate">
+                                          {allAssignees[0].name}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <div className="flex items-center gap-1 cursor-help">
+                                              <UserIcon className="h-3 w-3 text-muted-foreground" />
+                                              <span className="max-w-[100px] truncate">
+                                                {allAssignees[0].name}
+                                              </span>
+                                              <Badge variant="secondary" className="text-xs ml-1">
+                                                +{allAssignees.length - 1}
+                                              </Badge>
                                             </div>
-                                          </div>
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    </TooltipProvider>
-                                  )}
-                                </div>
+                                          </TooltipTrigger>
+                                          <TooltipContent side="top" className="max-w-xs">
+                                            <div className="space-y-1">
+                                              <p className="font-medium">All Assignees ({allAssignees.length}):</p>
+                                              {allAssignees.map((assignee, index) => (
+                                                <div key={index} className="text-xs flex items-center gap-2">
+                                                  <UserIcon className="h-3 w-3" />
+                                                  <span>{assignee.name}</span>
+                                                  <span className="text-muted-foreground">
+                                                    - {new Date(assignee.assignedAt).toLocaleDateString()}
+                                                  </span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground">Unassigned</span>
+                                )}
                               </TableCell>
                               <TableCell className="max-w-[150px] truncate">{task.assignerName}</TableCell>
                               <TableCell>

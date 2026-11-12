@@ -249,3 +249,747 @@
   background: rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* ==========================================
+   ROBOFEST 2026 - Stranger Things × Tech
+   ========================================== */
+
+/* Robofest Color Variables */
+:root {
+  --robofest-red: #e50914;
+  --robofest-cyan: #00f6ff;
+  --robofest-purple: #8b00ff;
+  --robofest-magenta: #ff00ff;
+  --robofest-dark: #0b0b14;
+  --robofest-dark-purple: #1a0a2e;
+}
+
+/* Main Page Container */
+.robofest-page {
+  min-height: 100vh;
+  background: var(--robofest-dark);
+  color: white;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Effects */
+.robofest-bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, var(--robofest-dark-purple) 0%, var(--robofest-dark) 70%);
+  z-index: 0;
+}
+
+.binary-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.circuit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(90deg, rgba(229, 9, 20, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(229, 9, 20, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: circuitPulse 4s ease-in-out infinite;
+}
+
+@keyframes circuitPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.fog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 20% 80%, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 246, 255, 0.1) 0%, transparent 40%);
+  animation: fogDrift 20s ease-in-out infinite;
+}
+
+@keyframes fogDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-20px); }
+}
+
+/* Lightning Effects */
+.lightning-container {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.lightning-flash {
+  position: absolute;
+  width: 3px;
+  height: 200px;
+  background: linear-gradient(to bottom, var(--robofest-red), transparent);
+  filter: blur(2px);
+  animation: lightningFlash 0.2s ease-out;
+}
+
+@keyframes lightningFlash {
+  0% { opacity: 1; transform: scaleY(0); }
+  50% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(1); }
+}
+
+/* Navigation Styles */
+.robofest-nav {
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.robofest-nav-scrolled {
+  background: rgba(11, 11, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+}
+
+.robofest-logo-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(229, 9, 20, 0.2);
+  border: 1px solid var(--robofest-red);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.robofest-logo-icon:hover {
+  box-shadow: 0 0 20px var(--robofest-red);
+}
+
+.robofest-logo-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: white;
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+}
+
+.robofest-nav-link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.robofest-nav-link::before {
+  content: '/';
+  margin-right: 0.5rem;
+  color: var(--robofest-red);
+  opacity: 0.5;
+}
+
+.robofest-nav-link:hover {
+  color: white;
+  text-shadow: 0 0 10px var(--robofest-cyan);
+}
+
+.robofest-menu-toggle {
+  color: white;
+  padding: 0.5rem;
+  border: 1px solid rgba(229, 9, 20, 0.5);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.robofest-menu-toggle:hover {
+  background: rgba(229, 9, 20, 0.2);
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
+}
+
+.robofest-mobile-menu {
+  background: rgba(11, 11, 20, 0.98);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(229, 9, 20, 0.3);
+  padding: 1rem;
+}
+
+.robofest-mobile-link {
+  display: block;
+  padding: 1rem;
+  color: white;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(229, 9, 20, 0.2);
+  transition: all 0.3s ease;
+}
+
+.robofest-mobile-link:hover {
+  background: rgba(229, 9, 20, 0.1);
+  padding-left: 1.5rem;
+}
+
+/* Hero Section */
+.robofest-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  padding-top: 80px;
+}
+
+.robofest-hero-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .robofest-hero-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.robofest-hero-left {
+  position: relative;
+  z-index: 20;
+}
+
+.robofest-hero-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Presents Tag */
+.robofest-presents {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--robofest-red);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px var(--robofest-red);
+}
+
+/* Main Title - Stranger Things Style */
+.robofest-title {
+  margin-bottom: 1.5rem;
+  line-height: 0.9;
+}
+
+.robofest-title-main {
+  display: block;
+  font-family: 'Times New Roman', 'ITC Benguiat', serif;
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  color: var(--robofest-red);
+  text-shadow: 
+    0 0 10px var(--robofest-red),
+    0 0 20px var(--robofest-red),
+    0 0 40px var(--robofest-red),
+    0 0 80px var(--robofest-red);
+  letter-spacing: 0.05em;
+  animation: titleGlow 3s ease-in-out infinite, titleFlicker 0.1s ease-in-out infinite;
+}
+
+.robofest-title-year {
+  display: block;
+  font-family: 'Times New Roman', 'ITC Benguiat', serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 700;
+  color: var(--robofest-red);
+  text-shadow: 
+    0 0 10px var(--robofest-red),
+    0 0 20px var(--robofest-red),
+    0 0 40px var(--robofest-red);
+  letter-spacing: 0.1em;
+  margin-top: -0.2em;
+}
+
+@keyframes titleGlow {
+  0%, 100% { 
+    filter: brightness(1);
+    text-shadow: 
+      0 0 10px var(--robofest-red),
+      0 0 20px var(--robofest-red),
+      0 0 40px var(--robofest-red),
+      0 0 80px var(--robofest-red);
+  }
+  50% { 
+    filter: brightness(1.2);
+    text-shadow: 
+      0 0 15px var(--robofest-red),
+      0 0 30px var(--robofest-red),
+      0 0 60px var(--robofest-red),
+      0 0 100px var(--robofest-red);
+  }
+}
+
+@keyframes titleFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+/* Glitch Text Effect */
+.glitch-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--robofest-cyan);
+  text-shadow: 0 0 10px var(--robofest-cyan);
+  position: relative;
+  animation: glitch 2s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  animation: glitchTop 2s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+}
+
+.glitch-text::after {
+  animation: glitchBottom 2s infinite;
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+@keyframes glitchTop {
+  0%, 100% { transform: translate(0); color: var(--robofest-cyan); }
+  20% { transform: translate(2px, -2px); color: var(--robofest-red); }
+  40% { transform: translate(-2px, 2px); color: var(--robofest-magenta); }
+  60% { transform: translate(2px, 0); color: var(--robofest-cyan); }
+  80% { transform: translate(-2px, -2px); color: var(--robofest-red); }
+}
+
+@keyframes glitchBottom {
+  0%, 100% { transform: translate(0); color: var(--robofest-cyan); }
+  20% { transform: translate(-2px, 2px); color: var(--robofest-magenta); }
+  40% { transform: translate(2px, -2px); color: var(--robofest-red); }
+  60% { transform: translate(-2px, 0); color: var(--robofest-cyan); }
+  80% { transform: translate(2px, 2px); color: var(--robofest-magenta); }
+}
+
+.robofest-theme {
+  margin-bottom: 1.5rem;
+}
+
+/* Supporting Tagline */
+.robofest-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  max-width: 400px;
+}
+
+/* Event Info */
+.robofest-event-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.robofest-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.robofest-info-divider {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* CTA Buttons */
+.robofest-cta-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.robofest-btn-primary {
+  background: var(--robofest-red) !important;
+  color: white !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.1em !important;
+  padding: 1.25rem 2rem !important;
+  border: 2px solid var(--robofest-red) !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.robofest-btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.robofest-btn-primary:hover {
+  box-shadow: 
+    0 0 20px var(--robofest-red),
+    0 0 40px var(--robofest-red),
+    inset 0 0 20px rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+.robofest-btn-primary:hover::before {
+  transform: translateX(100%);
+}
+
+.robofest-btn-secondary {
+  background: transparent !important;
+  color: var(--robofest-cyan) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.1em !important;
+  padding: 1.25rem 2rem !important;
+  border: 2px solid var(--robofest-cyan) !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.robofest-btn-secondary:hover {
+  background: rgba(0, 246, 255, 0.1) !important;
+  box-shadow: 
+    0 0 20px var(--robofest-cyan),
+    0 0 40px rgba(0, 246, 255, 0.5),
+    inset 0 0 20px rgba(0, 246, 255, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+/* Countdown Section */
+.robofest-countdown-section {
+  margin-top: 2rem;
+}
+
+.robofest-countdown-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+}
+
+.countdown-digit-container {
+  background: rgba(229, 9, 20, 0.15);
+  border: 1px solid var(--robofest-red);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  min-width: 60px;
+  text-align: center;
+  box-shadow: 
+    0 0 10px rgba(229, 9, 20, 0.3),
+    inset 0 0 20px rgba(229, 9, 20, 0.1);
+}
+
+@media (min-width: 768px) {
+  .countdown-digit-container {
+    padding: 1rem 1.5rem;
+    min-width: 80px;
+  }
+}
+
+.countdown-digit {
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--robofest-red);
+  text-shadow: 0 0 10px var(--robofest-red);
+  animation: digitFlicker 3s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .countdown-digit {
+    font-size: 2.5rem;
+  }
+}
+
+@keyframes digitFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+  52% { opacity: 1; }
+  54% { opacity: 0.9; }
+  56% { opacity: 1; }
+}
+
+.countdown-label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .countdown-label {
+    font-size: 0.7rem;
+  }
+}
+
+.countdown-separator {
+  font-family: 'Courier New', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--robofest-red);
+  text-shadow: 0 0 10px var(--robofest-red);
+  margin: 0 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .countdown-separator {
+    font-size: 3rem;
+    margin: 0 0.5rem;
+  }
+}
+
+/* Portal Styles */
+.portal-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+@media (min-width: 768px) {
+  .portal-container {
+    width: 450px;
+    height: 450px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .portal-container {
+    width: 550px;
+    height: 550px;
+  }
+}
+
+.portal-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid;
+  animation: portalPulse 3s ease-in-out infinite;
+}
+
+.portal-ring-outer {
+  inset: 0;
+  border-color: var(--robofest-red);
+  box-shadow: 
+    0 0 30px var(--robofest-red),
+    0 0 60px var(--robofest-red),
+    inset 0 0 30px rgba(229, 9, 20, 0.3);
+  animation-delay: 0s;
+}
+
+.portal-ring-middle {
+  inset: 10%;
+  border-color: var(--robofest-magenta);
+  box-shadow: 
+    0 0 20px var(--robofest-magenta),
+    0 0 40px var(--robofest-magenta);
+  animation-delay: 0.5s;
+}
+
+.portal-ring-inner {
+  inset: 20%;
+  border-color: var(--robofest-cyan);
+  box-shadow: 
+    0 0 15px var(--robofest-cyan),
+    0 0 30px var(--robofest-cyan);
+  animation-delay: 1s;
+}
+
+@keyframes portalPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.portal-core {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--robofest-cyan) 0%,
+    var(--robofest-purple) 30%,
+    var(--robofest-dark) 70%
+  );
+  box-shadow: 
+    0 0 50px var(--robofest-cyan),
+    0 0 100px var(--robofest-purple),
+    inset 0 0 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.portal-vortex {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    var(--robofest-cyan),
+    transparent,
+    var(--robofest-red),
+    transparent,
+    var(--robofest-magenta),
+    transparent
+  );
+  animation: portalSpin 10s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes portalSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.portal-arc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--robofest-red), transparent);
+  transform-origin: left center;
+  animation: arcFlicker 2s ease-in-out infinite;
+  filter: blur(1px);
+}
+
+@keyframes arcFlicker {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.portal-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--robofest-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--robofest-cyan);
+  animation: particleFloat 3s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% { 
+    transform: translateY(-20px) scale(1.5);
+    opacity: 1;
+  }
+}
+
+/* Floating Drone */
+.floating-drone {
+  filter: drop-shadow(0 0 10px var(--robofest-red));
+}
+
+/* Scroll Indicator */
+.robofest-scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--robofest-red);
+  text-shadow: 0 0 10px var(--robofest-red);
+  cursor: pointer;
+}
+
+/* Section Styles */
+.robofest-section {
+  position: relative;
+  z-index: 10;
+  background: rgba(11, 11, 20, 0.9);
+  border-top: 1px solid rgba(229, 9, 20, 0.3);
+}
+
+.robofest-section-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--robofest-red);
+  text-shadow: 0 0 20px var(--robofest-red);
+  text-align: center;
+}
+
+/* Color utility classes */
+.text-robofest-red { color: var(--robofest-red); }
+.text-robofest-cyan { color: var(--robofest-cyan); }
+.text-robofest-purple { color: var(--robofest-purple); }
+.text-robofest-magenta { color: var(--robofest-magenta); }
+.bg-robofest-dark { background: var(--robofest-dark); }
+.bg-robofest-dark-purple { background: var(--robofest-dark-purple); }

@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
-    const { id, name, email, position, lastNotificationReadAt, avatarUrl, githubUrl, linkedinUrl } = body;
+    const { id, name, email, position, lastNotificationReadAt, avatarUrl, githubUrl, linkedinUrl, notificationPreferences } = body;
     const user = await db.select({
         id: users.id,
         name: users.name,
@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
         githubUrl: users.githubUrl,
         linkedinUrl: users.linkedinUrl,
         lastNotificationReadAt: users.lastNotificationReadAt,
+        notificationPreferences: users.notificationPreferences,
     }).from(users)
         .where(eq(users.id, id))
         .limit(1);
@@ -56,6 +57,9 @@ export async function POST(request: NextRequest) {
     if (lastNotificationReadAt) {
         updatedUser.lastNotificationReadAt = new Date(lastNotificationReadAt);
     }
+    if (notificationPreferences) {
+        (updatedUser as any).notificationPreferences = notificationPreferences;
+    }
     
     const userUpdate = await db.update(users)
         .set({
@@ -66,6 +70,7 @@ export async function POST(request: NextRequest) {
             githubUrl: updatedUser.githubUrl,
             linkedinUrl: updatedUser.linkedinUrl,
             lastNotificationReadAt: updatedUser.lastNotificationReadAt,
+            notificationPreferences: (updatedUser as any).notificationPreferences || updatedUser.notificationPreferences,
         })
         .where(eq(users.id, id))
         .returning({
@@ -77,6 +82,7 @@ export async function POST(request: NextRequest) {
             githubUrl: users.githubUrl,
             linkedinUrl: users.linkedinUrl,
             lastNotificationReadAt: users.lastNotificationReadAt,
+            notificationPreferences: users.notificationPreferences,
         });
     if (userUpdate.length === 0) {
         return NextResponse.json({ error: "Failed to update user" }, { status: 500 });

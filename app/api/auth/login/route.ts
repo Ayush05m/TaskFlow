@@ -3,6 +3,7 @@ import { db } from "@/db"; // adjust to your actual path
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
+import { comparePassword } from "@/lib/hash";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,8 +38,9 @@ export async function POST(request: NextRequest) {
 
     const user = userResult[0];
 
-    // 🛡️ Optional: use bcrypt.compare here
-    if (user.password !== password) {
+    // Compare password using bcrypt (handles both hashed and plain text passwords for backward compatibility)
+    const isPasswordValid = await comparePassword(password, user.password);
+    if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 

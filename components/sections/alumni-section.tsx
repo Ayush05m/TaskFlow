@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ExternalLink, Linkedin, Github, Award, MapPin, Calendar, Star } from 'lucide-react'
 import Link from "next/link"
 import { AlumniInterface } from "@/lib/types"
+import alumniData from "@/app/alumni/constants"
 
 // Alumni data
 // const alumniData = [
@@ -114,8 +115,8 @@ export function AlumniSection() {
   const [showAll, setShowAll] = useState(false)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
-  // const displayedAlumni = showAll ? alumniData : alumniData.slice(0, 3)
-  const displayedAlumni: AlumniInterface[] = []
+  const displayedAlumni = showAll ? alumniData : alumniData.slice(0, 3)
+  // const displayedAlumni: AlumniInterface[] = []
 
   return (
     <section id="alumni" className="relative py-32 px-4 overflow-hidden">
@@ -146,20 +147,20 @@ export function AlumniSection() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {displayedAlumni.map((alumni, index) => (
             <Card
-              key={alumni.id}
+              key={index}
               className="group relative overflow-hidden bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]"
-              onMouseEnter={() => setHoveredCard(alumni.id)}
+              onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
             >
               {/* Featured Badge */}
-              {alumni.featured && (
+              {/* {alumni.featured && (
                 <div className="absolute top-4 right-4 z-10">
                   <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full text-white text-xs font-medium shadow-lg">
                     <Star className="h-3 w-3 fill-current" />
                     Featured
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-blue-500/5 group-hover:to-purple-500/10 transition-all duration-500"></div>
@@ -171,68 +172,49 @@ export function AlumniSection() {
                 {/* Profile Section */}
                 <div className="text-center mb-6">
                   <div className="relative inline-block mb-4">
-                    <Avatar className="h-24 w-24 border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    {/* <Avatar className="h-24 w-24 border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-110 transition-transform duration-300">
                       <AvatarImage src={alumni.avatar as string || "/placeholder.svg"} alt={alumni.name} className="object-cover" />
                       <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-2xl font-bold">
                         {alumni.name.split(" ").map((n) => n[0]).join("")}
                       </AvatarFallback>
-                    </Avatar>
+                    </Avatar> */}
                     <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
                       <Award className="h-4 w-4 text-white" />
                     </div>
                   </div>
 
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{alumni.name}</h3>
-                  <p className="text-blue-600 dark:text-blue-400 font-semibold text-sm mb-1">{alumni.position}</p>
                   <div className="flex items-center justify-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
-                    <Calendar className="h-3 w-3" />
-                    {alumni.years}
                   </div>
                 </div>
 
                 {/* Current Role */}
-                <div className="mb-6 p-4 bg-gradient-to-r from-slate-50 to-blue-50/50 dark:from-slate-800/50 dark:to-blue-900/20 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+                {/* <div className="mb-6 p-4 bg-gradient-to-r from-slate-50 to-blue-50/50 dark:from-slate-800/50 dark:to-blue-900/20 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
                   <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Current Position</div>
-                  <div className="text-slate-900 dark:text-white font-medium mb-2">{alumni.currentRole}</div>
-                  <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
-                    <MapPin className="h-3 w-3" />
-                    {alumni.location}
-                  </div>
-                </div>
+                </div> */}
 
                 {/* Bio */}
                 <div className="mb-6">
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{alumni.bio}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{alumni.branch} Engineering</p>
                 </div>
 
-                {/* Skills */}
+                {/* Skills
                 <div className="mb-6">
                   <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Expertise</div>
-                  <div className="flex flex-wrap gap-2">
-                    {alumni.skills.slice(0, 3).map((skill, i) => (
-                      <Badge
-                        key={i}
-                        variant="secondary"
-                        className="text-xs px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 border-0 hover:scale-105 transition-transform duration-200"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+                </div> */}
 
                 {/* Achievements */}
-                <div className="mb-6">
-                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Key Achievements</div>
-                  <div className="space-y-1">
+                {/* <div className="mb-6">
+                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Key Achievements</div> */}
+                  {/* <div className="space-y-1">
                     {alumni.achievements.slice(0, 2).map((achievement, i) => (
                       <div key={i} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
                         <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-1.5 flex-shrink-0"></div>
                         {achievement}
                       </div>
                     ))}
-                  </div>
-                </div>
+                  </div> */}
+                {/* </div> */}
 
                 {/* Social Links */}
                 <div className="flex justify-center gap-4 pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
@@ -246,7 +228,7 @@ export function AlumniSection() {
                       <Linkedin className="h-4 w-4" />
                     </a>
                   )}
-                  {alumni.github && (
+                  {/* {alumni.github && (
                     <a
                       href={alumni.github}
                       target="_blank"
@@ -255,7 +237,7 @@ export function AlumniSection() {
                     >
                       <Github className="h-4 w-4" />
                     </a>
-                  )}
+                  )} */}
                 </div>
               </CardContent>
             </Card>
@@ -265,14 +247,6 @@ export function AlumniSection() {
         {/* Show More/Less Button */}
         <div className="text-center mt-16">
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              onClick={() => setShowAll(!showAll)}
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-            >
-              {showAll ? 'Show Less' : 'View All Alumni'}
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
 
             <Link href="/alumni">
               <Button

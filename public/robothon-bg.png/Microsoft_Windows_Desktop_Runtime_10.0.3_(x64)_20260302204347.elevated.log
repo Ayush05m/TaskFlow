@@ -1,0 +1,11 @@
+[169C:3F68][2026-03-02T20:43:47]i001: Burn x86 v5.0.2+dc67792d077edc24f5b197d5bd13a71e921b9396, Windows v10.0 x64 (Build 26200: Service Pack 0), path: C:\Users\VICTUS\AppData\Local\Temp\{8F5E8780-112B-43C5-9C1E-32B4452E69FE}\.be\windowsdesktop-runtime-10.0.3-win-x64.exe
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing formatted variable 'DOTNETHOME' to value '[DOTNETHOME_X64]'
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing string variable 'BUNDLEMONIKER' to value 'Microsoft Windows Desktop Runtime'
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing string variable 'DOTNETRUNTIMEVERSION' to value '10.0.3'
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing string variable 'DOTNETHOMESIMILARITYCHECKOVERRIDE' to value ''
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing string variable 'VERSIONMAJOR' to value '10'
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing string variable 'VERSIONMINOR' to value '0'
+[169C:3F68][2026-03-02T20:43:47]i000: Initializing string variable 'MINIMUMVSVERSION' to value ''
+[169C:3F68][2026-03-02T20:43:47]i009: Command Line: '-q -burn.elevated ***** ***** *****'
+[169C:3F68][2026-03-02T20:43:47]i000: Setting string variable 'WixBundleLog' to value 'C:\Users\VICTUS\AppData\Local\Temp\Microsoft_Windows_Desktop_Runtime_10.0.3_(x64)_20260302204347.elevated.log'
+[169C:3F68][2026-03-02T20:43:58]i021: Exit code: 0x0

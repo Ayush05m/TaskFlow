@@ -38,7 +38,7 @@ export default function LoginPage() {
       <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8">
         <div className="flex items-center gap-2">
           <CheckCircle className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold">RobotiX TaskFlow</span>
+          <span className="text-lg font-bold">ROBOTiX TaskFlow</span>
         </div>
       </Link>
       <Card className="w-full max-w-md">
@@ -62,7 +62,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link href="#" className="text-sm text-primary underline-offset-4 hover:underline">
+                <Link href="/forgot" className="text-sm text-primary underline-offset-4 hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -85,9 +85,9 @@ export default function LoginPage() {
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
+              {/* <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-background px-2 text-muted-foreground">Or try demo accounts</span>
-              </div>
+              </div> */}
             </div>
 
             {/* <div className="grid grid-cols-2 gap-2 w-full">
@@ -112,10 +112,7 @@ export default function LoginPage() {
             </div> */}
 
             <div className="text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-primary underline-offset-4 hover:underline">
-                Create account
-              </Link>
+              Don&apos;t have an account? <span className="text-sm text-muted-foreground">Registration temporarily closed.</span>
             </div>
           </CardFooter>
         </form>

@@ -16,6 +16,12 @@ export const users = pgTable(
     githubUrl: text("github_url"),
     linkedinUrl: text("linkedin_url"),
     lastNotificationReadAt: timestamp("last_notification_read_at", { withTimezone: true }).defaultNow(),
+    notificationPreferences: jsonb("notification_preferences").default({
+      emailNotifications: true,
+      taskAssigned: true,
+      taskUpdated: true,
+      taskCompleted: true,
+    }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   },
@@ -225,6 +231,24 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     references: [projects.id],
   }),
 }))
+
+export const passwordResets = pgTable(
+  "password_resets",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    used: boolean("used").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    lastSentAt: timestamp("last_sent_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    tokenIdx: index("idx_password_resets_token_hash").on(table.tokenHash),
+    userIdx: index("idx_password_resets_user_id").on(table.userId),
+    expiresIdx: index("idx_password_resets_expires_at").on(table.expiresAt),
+  })
+);
 
 // Types
 export type User = typeof users.$inferSelect
